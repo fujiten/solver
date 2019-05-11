@@ -73,7 +73,7 @@ jobs:
           name: Push container to registry.heroku.com
           command: |
             docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com
-            docker push registry.heroku.com/${HEROKU_APP_NAME_DEV}/app
+            docker push registry.heroku.com/${HEROKU_APP_NAME_DEV}/web
       - run:
           name: Release the app
           command: bash .circleci/heroku-container-release-dev.sh
