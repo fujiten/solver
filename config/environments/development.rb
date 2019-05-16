@@ -52,4 +52,4 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
 
-JWTSessions.token_store = :redis, { redis_url: "redis://redis:6379" }
+REDIS_URL = "redis://redis:6379"
