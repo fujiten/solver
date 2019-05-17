@@ -5,7 +5,7 @@ class HomeController < ApplicationController
       puts "you are on development"
     else
       puts REDIS_URL
-      puts "you are not on development "
+      puts "you are not on development"
     end
 
     @users = User.all 
