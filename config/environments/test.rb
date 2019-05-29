@@ -47,5 +47,4 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 end
 
-
 REDIS_URL = "redis://redis:6379"
