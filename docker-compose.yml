@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 services:
   app:
     build:
@@ -12,8 +12,6 @@ services:
       - bundle_data:/usr/local/bundle
     depends_on:
       - db
-      - redis
-    links:
       - redis
     environment:
       - REDIS_HOST=redis
