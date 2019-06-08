@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :quizzes
       resources :users
+      resources :queries
     end
   end
 

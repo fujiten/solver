@@ -1,7 +1,7 @@
 module Api 
   module V1
     class QuizzesController < ApplicationController
-      before_action :set_quiz, only: [:show] 
+      # before_action :set_quiz, only: [:show] 
       
       def index
         @quizzes = Quiz.all
@@ -10,14 +10,11 @@ module Api
       end
 
       def show
-        render json: @quiz
+        @quiz = Quiz.includes(:queries).find(params[:id])
+        @queries = @quiz.queries
+        @quiz_status = QuizStatus.find_by(user_id: 1, quiz_id: params[:id])
+        render json: [@quiz, @queries, @quiz_status]
       end
-
-      private
-
-       def set_quiz
-        @quiz = Quiz.find(params[:id])
-       end
 
     end
   end

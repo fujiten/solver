@@ -10,10 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_28_073644) do
+ActiveRecord::Schema.define(version: 2019_06_03_035123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "queries", force: :cascade do |t|
+    t.string "body", null: false
+    t.bigint "quiz_id", null: false
+    t.string "answer", null: false
+    t.integer "revealed_point", default: 0, null: false
+    t.integer "point", default: 1, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "category", default: 0, null: false
+    t.index ["quiz_id"], name: "index_queries_on_quiz_id"
+  end
+
+  create_table "quiz_statuses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "quiz_id", null: false
+    t.integer "total_points", default: 0, null: false
+    t.integer "query_times", default: 0, null: false
+    t.boolean "be_solved", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["quiz_id"], name: "index_quiz_statuses_on_quiz_id"
+    t.index ["user_id"], name: "index_quiz_statuses_on_user_id"
+  end
 
   create_table "quizzes", force: :cascade do |t|
     t.string "title", null: false
@@ -36,5 +60,8 @@ ActiveRecord::Schema.define(version: 2019_05_28_073644) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "queries", "quizzes"
+  add_foreign_key "quiz_statuses", "quizzes"
+  add_foreign_key "quiz_statuses", "users"
   add_foreign_key "quizzes", "users"
 end
