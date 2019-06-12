@@ -35,7 +35,7 @@ module Api
           @queries = Quiz.find_by(id: params[:id]).queries
           render json: [@queries, @quiz_status]
         else
-          render json: @quiz.errors, status: :unprocessable_entity
+          render json: @quiz_status.errors, status: :unprocessable_entity
         end
 
       end
