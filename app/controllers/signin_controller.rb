@@ -13,7 +13,7 @@ class SigninController < ApplicationController
                         secure: Rails.env.production?)
       render json: { csrf: tokens[:csrf], uid: user.id }
     else
-      # this method is inherited from Applicationcontroller
+      # this method is inherited from ApplicationController
       not_authorized
     end
   end
@@ -27,7 +27,7 @@ class SigninController < ApplicationController
   private
 
     def not_found
-      render json: { error: "Cannot find email/password combination"}, status: :not_found
+      render json: { error: "メールアドレスとパスワードの組み合わせが見つかりません"}, status: :not_found
     end
     
 end
