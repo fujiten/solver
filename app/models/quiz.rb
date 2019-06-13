@@ -4,4 +4,6 @@ class Quiz < ApplicationRecord
 
   has_many :users, through: :quiz_statuses
   has_many :quiz_statuses, dependent: :destroy
+
+  enum published: { drafted: 0, published: 1 }
 end
