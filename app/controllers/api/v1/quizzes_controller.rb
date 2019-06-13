@@ -14,6 +14,20 @@ module Api
         @quiz = Quiz.find(params[:id])
         @author = @quiz.author
         @combination = {quiz: @quiz, author: @author}
+
+        #「ログインしてない場合」はrescueで回収して[:isOthers]（他人クイズ）フラグを立てる。
+        #「ログインしている場合」については、条件分岐する。
+        # （あとでモデル層に処理を委譲します。）
+        begin
+          authorize_access_request!
+          if @author.id == payload['user_id']
+            @combination[:isMine] = true
+          else
+            @combination[:isOthers] = true
+          end
+        rescue JWTSessions::Errors::Unauthorized
+          @combination[:isOthers] = true
+        end
         render json: @combination
       end
 
@@ -50,7 +64,7 @@ module Api
 
       private
 
-        #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadがセットする。
+        #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadをする必要あり。
         def quiz_params
           params.require(:quiz).permit(:title, :question, :answer, :diffculity).merge(user_id: current_user.id)
         end
