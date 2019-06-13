@@ -2,10 +2,10 @@ module Api
   module V1
     class QuizzesController < ApplicationController
       # before_action :set_quiz, only: [:show] 
-      before_action :authorize_access_request!, only: [:create, :solve]
+      before_action :authorize_access_request!, only: [:create, :solve, :show_my_quizzes]
       
       def index
-        @quizzes = Quiz.all
+        @quizzes = Quiz.all.published
 
         render json: @quizzes
       end
@@ -13,7 +13,8 @@ module Api
       def show
         @quiz = Quiz.find(params[:id])
         @author = @quiz.author
-        render json: [@quiz, @author]
+        @combination = {quiz: @quiz, author: @author}
+        render json: @combination
       end
 
       def create
@@ -33,11 +34,18 @@ module Api
 
         if @quiz_status.save
           @queries = Quiz.find_by(id: params[:id]).queries
-          render json: [@queries, @quiz_status]
+          @combination = {quiz_status: @quiz_status, queries: @queries}
+          render json: @combination
         else
           render json: @quiz_status.errors, status: :unprocessable_entity
         end
 
+      end
+
+      def show_my_quizzes
+        # draftedとpublishedをそれぞれグループ化してクライアントに返す。
+        @my_quizzes = current_user.my_quizzes.to_a.group_by{ |quiz| quiz.published }
+        render json: @my_quizzes
       end
 
       private

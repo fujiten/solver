@@ -4,13 +4,24 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+
       resources :quizzes do
         member do
           post :solve
         end
+        collection do
+          get :show_my_quizzes
+        end
       end
-      resources :users
+
+      resources :users do
+        collection do
+          get :show_mypage
+        end
+      end
+
       resources :queries
+
     end
   end
 
