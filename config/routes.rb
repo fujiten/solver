@@ -6,11 +6,9 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       resources :quizzes do
+        resources :queries
         member do
           post :solve
-        end
-        collection do
-          get :show_my_quizzes
         end
       end
 

@@ -44,6 +44,7 @@ module Api
       def solve
 
         #ログインしているときの処理
+        p current_user
         @quiz_status = QuizStatus.new(user_id: current_user.id, quiz_id: params[:id])
 
         if @quiz_status.save
@@ -54,12 +55,6 @@ module Api
           render json: @quiz_status.errors, status: :unprocessable_entity
         end
 
-      end
-
-      def show_my_quizzes
-        # draftedとpublishedをそれぞれグループ化してクライアントに返す。
-        @my_quizzes = current_user.my_quizzes.to_a.group_by{ |quiz| quiz.published }
-        render json: @my_quizzes
       end
 
       private

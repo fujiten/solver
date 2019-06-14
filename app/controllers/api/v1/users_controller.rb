@@ -9,7 +9,10 @@ module Api
       end
 
       def show_mypage
-        render json: current_user
+        # draftedとpublishedをそれぞれグループ化してクライアントに返す。
+        @my_quizzes = current_user.my_quizzes.to_a.group_by{ |quiz| quiz.published }
+        @combination = {my_quizzes: @my_quizzes, current_user: current_user }
+        render json: @combination
       end
 
       private
