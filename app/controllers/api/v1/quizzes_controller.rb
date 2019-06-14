@@ -17,7 +17,8 @@ module Api
 
         #「ログインしてない場合」はrescueで回収して[:isOthers]（他人クイズ）フラグを立てる。
         #「ログインしている場合」については、条件分岐する。
-        # （あとでモデル層に処理を委譲します。）
+        # （あとでモデル層に処理を委譲します。) 
+        # access_expireが切れていた場合、isOthersフラグが立ってしまう不具合要修正
         begin
           authorize_access_request!
           if @author.id == payload['user_id']

@@ -3,30 +3,26 @@ module Api
     class QueriesController < ApplicationController
       before_action :set_query, only: [:show, :update, :destroy]
 
-      # GET /queries
       def index
-        @queries = Query.all
+        @queries = Query.where(quiz_id: params[:quiz_id])
 
         render json: @queries
       end
 
-      # GET /queries/1
       def show
         render json: @query
       end
 
-      # POST /queries
       def create
-        @query = Query.new(query_params)
+        @query = Query.new(query_params.merge(quiz_id: params[:quiz_id]))
 
         if @query.save
-          render json: @query, status: :created, location: @query
+          render json: @query, status: :created
         else
           render json: @query.errors, status: :unprocessable_entity
         end
       end
 
-      # PATCH/PUT /queries/1
       def update
         if @query.update(query_params)
           render json: @query
@@ -35,7 +31,6 @@ module Api
         end
       end
 
-      # DELETE /queries/1
       def destroy
         @query.destroy
       end
@@ -48,7 +43,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def query_params
-          params.require(:query).permit(:body, :answer, :revealed_point, :point)
+          params.require(:query).permit(:category, :body, :answer, :revealed_point, :point)
         end
 
     end
