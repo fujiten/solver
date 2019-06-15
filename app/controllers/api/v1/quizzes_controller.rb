@@ -1,8 +1,8 @@
 module Api 
   module V1
     class QuizzesController < ApplicationController
-      # before_action :set_quiz, only: [:show] 
-      before_action :authorize_access_request!, only: [:create, :solve, :show_my_quizzes]
+      before_action :set_quiz, only: [:show] 
+      before_action :authorize_access_request!, only: [:create, :update, :solve, :show_my_quizzes]
       
       def index
         @quizzes = Quiz.all.published
@@ -11,7 +11,6 @@ module Api
       end
 
       def show
-        @quiz = Quiz.find(params[:id])
         @author = @quiz.author
         @combination = {quiz: @quiz, author: @author}
 
@@ -42,10 +41,19 @@ module Api
         end
       end
 
+      def update
+        @quiz = current_user.my_quizzes.find(params[:id])
+        if @quiz.update(quiz_params)
+          render json: @quiz
+        else
+          render json: @quiz.errors, status: :unprocessable_entity
+        end
+        
+      end
+
       def solve
 
         #ログインしているときの処理
-        p current_user
         @quiz_status = QuizStatus.new(user_id: current_user.id, quiz_id: params[:id])
 
         if @quiz_status.save
@@ -62,9 +70,12 @@ module Api
 
         #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadをする必要あり。
         def quiz_params
-          params.require(:quiz).permit(:title, :question, :answer, :diffculity).merge(user_id: current_user.id)
+          params.require(:quiz).permit(:title, :question, :answer, :diffculity, :published).merge(user_id: current_user.id)
         end
 
+        def set_quiz
+          @quiz = Quiz.find(params[:id])
+        end
     end
   end
 end
