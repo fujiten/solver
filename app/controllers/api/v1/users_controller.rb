@@ -10,9 +10,17 @@ module Api
 
       def show_mypage
         # draftedとpublishedをそれぞれグループ化してクライアントに返す。
-        @my_quizzes = current_user.my_quizzes.to_a.group_by{ |quiz| quiz.published }
-        @combination = {my_quizzes: @my_quizzes, current_user: current_user }
-        render json: @combination
+        @my_quizzes = current_user.my_quizzes.group_by{ |quiz| quiz.published }
+
+        @grouped_my_quiz_statuses = QuizStatus.where(user_id: current_user.id).includes(:quiz)
+        @trying_quizzes = @grouped_my_quiz_statuses.where(be_solved: false).map{ |status| status.quiz }
+        @solved_quizzes = @grouped_my_quiz_statuses.where(be_solved: true).map{ |status| status.quiz }
+
+        @combination = { my_quizzes: @my_quizzes,
+                         trying_quizzes: @trying_quizzes,
+                         solved_quizzes: @solved_quizzes,
+                         current_user: current_user }
+        render json: @combination 
       end
 
       private
