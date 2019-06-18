@@ -23,6 +23,10 @@ module Api
           if @author.id == payload['user_id']
             @combination[:isMine] = true
           else
+            @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload['user_id'])
+            @combination[:quiz_status] = @quiz_status
+            @done_queries = @quiz_status&.done_queries 
+            @combination[:done_queries] = @done_queries
             @combination[:isOthers] = true
           end
         rescue JWTSessions::Errors::Unauthorized

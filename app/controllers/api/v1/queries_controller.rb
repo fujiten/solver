@@ -35,6 +35,16 @@ module Api
         @query.destroy
       end
 
+      def do_query
+        @query_status = QueryStatus.new(query_id: params[:id], quiz_status_id: query_params[:quiz_status_id])
+
+        if @query_status.save
+          render json: @query_status, status: :created
+        else
+          render json: @query_status.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_query
@@ -43,7 +53,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def query_params
-          params.require(:query).permit(:category, :body, :answer, :revealed_point, :point)
+          params.require(:query).permit(:category, :body, :answer, :revealed_point, :point, :quiz_status_id)
         end
 
     end
