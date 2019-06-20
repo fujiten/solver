@@ -2,7 +2,7 @@ module Api
   module V1
     class QuizzesController < ApplicationController
       before_action :set_quiz, only: [:show] 
-      before_action :authorize_access_request!, only: [:create, :update, :solve, :show_my_quizzes]
+      before_action :authorize_access_request!, only: [:create, :update, :solve, :update_quiz_status, :show_my_quizzes]
       
       def index
         @quizzes = Quiz.all.published
@@ -70,11 +70,30 @@ module Api
 
       end
 
+      def update_quiz_status
+        @quiz_status = QuizStatus.find_by(user_id: current_user.id, quiz_id: params[:id])
+
+        if params[:increment]
+          @quiz_status.failed_answer_times += 1
+        end
+          
+        if @quiz_status.update(quiz_status_params)
+          render json: @quiz_status
+        else
+          render json: @quiz_status.error, status: :unprocessable_entity
+        end
+
+      end
+
       private
 
         #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadをする必要あり。
         def quiz_params
           params.require(:quiz).permit(:title, :question, :answer, :diffculity, :published).merge(user_id: current_user.id)
+        end
+
+        def quiz_status_params
+          params.require(:quiz_status).permit(:total_points, :query_times, :be_solved)
         end
 
         def set_quiz

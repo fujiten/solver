@@ -14,7 +14,10 @@ Rails.application.routes.draw do
         
         member do
           post :solve
+          patch :update_quiz_status
         end
+
+        resources :choices, only: [:index, :create]
       end
 
       resources :users do
