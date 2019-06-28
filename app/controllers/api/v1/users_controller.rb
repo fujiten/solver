@@ -9,6 +9,7 @@ module Api
       end
 
       def show_mypage
+        p request.x_csrf_token
 
         # draftedとpublishedをそれぞれグループ化してクライアントに返す。
         @my_quizzes = current_user.my_quizzes.group_by{ |quiz| quiz.published }
