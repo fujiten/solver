@@ -9,8 +9,9 @@ class SigninController < ApplicationController
       tokens = session.login
       response.set_cookie(JWTSessions.access_cookie,
                         value: tokens[:access],
-                        httponly: true)
-      render json: { csrf: tokens[:csrf] }
+                        httponly: true,
+                        secure: Rails.env.production?)
+      render json: { csrf: tokens[:csrf], access: tokens[:access] }
     else
       # this method is inherited from ApplicationController
       not_authorized
