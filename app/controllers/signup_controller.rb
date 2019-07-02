@@ -13,7 +13,7 @@ class SignupController < ApplicationController
                           secure: Rails.env.production?)
       render json: { csrf: tokens[:csrf], access: tokens[:access] }
     else
-      render json: { error: user.errors.full_messages.join(' ') }, status: :unprocessable_entity
+      render json: { error: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
