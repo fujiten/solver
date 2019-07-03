@@ -8,4 +8,11 @@ class Quiz < ApplicationRecord
   has_many :choices
 
   enum published: { drafted: 0, published: 1 }
+
+  validates :title,     presence: true,
+                        length: { maximum: 20 }
+  validates :question,  presence: true,
+                        length: { maximum: 400 }
+  validates :answer,    presence: true,
+                        length: { maximum: 1000 }
 end
