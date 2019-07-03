@@ -16,6 +16,12 @@ ja:
         email: メールアドレス
         password: パスワード
         password_confirmation: 確認用パスワード
+      quiz:
+        title: タイトル
+        question: 問題
+        answer: 解説
+        level: レベル
+        diffculity: 難しさ
   date:
     abbr_day_names:
     - 日

@@ -41,7 +41,7 @@ module Api
         if @quiz.save
           render json: @quiz, status: :created
         else
-          render json: @quiz.errors, status: :unprocessable_entity
+          render json: { error: @quiz.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -89,7 +89,7 @@ module Api
 
         #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadをする必要あり。
         def quiz_params
-          params.require(:quiz).permit(:title, :question, :answer, :diffculity, :published).merge(user_id: current_user.id)
+          params.fetch(:quiz, {}).permit(:title, :question, :answer, :diffculity, :published).merge(user_id: current_user.id)
         end
 
         def quiz_status_params
