@@ -2,10 +2,19 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: [:show]
-      before_action :authorize_access_request!, only: [:show_mypage]
+      before_action :authorize_access_request!, only: [:update, :show_mypage]
 
       def show
         render json: @user
+      end
+
+      def update
+        @user = current_user
+        if @user.update(user_params)
+          render json: @user
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
       end
 
       def show_mypage
@@ -28,6 +37,10 @@ module Api
 
         def set_user
           @user = User.find(params[:id])
+        end
+
+        def user_params
+          params.require(:user).permit(:name, :description)
         end
       
     end
