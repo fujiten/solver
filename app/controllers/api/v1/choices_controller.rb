@@ -19,6 +19,24 @@ module Api
         
       end
 
+      def update
+        @choice = Choice.find(params[:id])
+        if @choice.update(choice_params)
+          render json: @choice
+        else
+          render json: @choice.errors, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        @choice = Choice.find(params[:id])
+        if @choice.destroy
+          render json: @choice
+        else
+          render json: @choice.errors, status: :unprocessable_entity
+        end
+      end
+
       private
 
         def choice_params

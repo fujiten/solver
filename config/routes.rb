@@ -17,7 +17,7 @@ Rails.application.routes.draw do
           patch :update_quiz_status
         end
 
-        resources :choices, only: [:index, :create]
+        resources :choices, only: [:index, :create, :update, :destroy]
       end
 
       resources :users do

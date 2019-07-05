@@ -32,7 +32,11 @@ module Api
       end
 
       def destroy
-        @query.destroy
+        if @query.destroy
+          render json: @query
+        else
+          render json: @query.errors, status: :unprocessable_entity
+        end
       end
 
       def do_query
