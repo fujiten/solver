@@ -2,7 +2,7 @@ module Api
   module V1
     class QuizzesController < ApplicationController
       before_action :set_quiz, only: [:show] 
-      before_action :authorize_access_request!, only: [:create, :update, :solve, :update_quiz_status, :show_my_quizzes]
+      before_action :authorize_access_request!, only: [:create, :update, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
       
       def index
         @quizzes = Quiz.all.published
@@ -52,7 +52,15 @@ module Api
         else
           render json: @quiz.errors, status: :unprocessable_entity
         end
-        
+      end
+
+      def destroy
+        @quiz = current_user.my_quizzes.find(params[:id])
+        if @quiz.destroy
+          render json: @quiz
+        else
+          render json: @quiz.errors, status: :unprocessable_entity
+        end
       end
 
       def solve
@@ -99,6 +107,7 @@ module Api
         def set_quiz
           @quiz = Quiz.find(params[:id])
         end
+
     end
   end
 end
