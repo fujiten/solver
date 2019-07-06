@@ -14,7 +14,7 @@ module Api
         if @choice.save
           render json: @choice, status: :created
         else
-          render json: @choice.errors, status: :unprocessable_entity
+          render json: { error: @choice.errors.full_messages }, status: :unprocessable_entity
         end
         
       end
@@ -40,7 +40,7 @@ module Api
       private
 
         def choice_params
-          params.required(:choice).permit(:body, :correctness)
+          params.fetch(:choice, {}).permit(:body, :correctness)
         end
 
 

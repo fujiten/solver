@@ -28,6 +28,9 @@ ja:
         revealed_point: 開示ポイント
         point: 獲得ポイント
         category: カテゴリ
+      choice:
+        body: 選択肢
+        correctness: 正解か不正解か
   date:
     abbr_day_names:
     - 日
