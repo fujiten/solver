@@ -22,6 +22,12 @@ ja:
         answer: 解説
         level: レベル
         diffculity: 難しさ
+      query:
+        body: 質問
+        answer: 回答
+        revealed_point: 開示ポイント
+        point: 獲得ポイント
+        category: カテゴリ
   date:
     abbr_day_names:
     - 日
