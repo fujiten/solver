@@ -5,9 +5,19 @@ module Api
       before_action :authorize_access_request!, only: [:create, :update, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
       
       def index
-        @quizzes = Quiz.all.published
+        @quizzes = Quiz.all.published.includes(:author)
 
-        render json: @quizzes
+        @json = @quizzes.map{ |quiz|
+          { title: quiz.title,
+            question: quiz.question,
+            answer: quiz.answer,
+            difficulity: quiz.difficulity,
+            created_at: quiz.created_at,
+            updated_at: quiz.updated_at,
+            published: quiz.published,
+            author_name: quiz.author.name } }
+
+        render json: @json
       end
 
       def show
