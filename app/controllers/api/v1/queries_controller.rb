@@ -19,7 +19,7 @@ module Api
         if @query.save
           render json: @query, status: :created
         else
-          render json: @query.errors, status: :unprocessable_entity
+          render json: { error: @query.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -57,7 +57,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def query_params
-          params.require(:query).permit(:category, :body, :answer, :revealed_point, :point, :quiz_status_id)
+          params.fetch(:query, {}).permit(:category, :body, :answer, :revealed_point, :point, :quiz_status_id)
         end
 
     end
