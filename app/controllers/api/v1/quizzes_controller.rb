@@ -8,7 +8,8 @@ module Api
         @quizzes = Quiz.all.published.includes(:author)
 
         @json = @quizzes.map{ |quiz|
-          { title: quiz.title,
+          { id: quiz.id,
+            title: quiz.title,
             question: quiz.question,
             answer: quiz.answer,
             difficulity: quiz.difficulity,
