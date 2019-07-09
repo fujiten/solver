@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :my_quizzes, class_name: "Quiz", dependent: :destroy
   has_many :quiz_statuses, dependent: :destroy
   has_many :trying_quizzes, through: :quiz_statuses, source: :quiz
+  has_one :avatar, dependent: :destroy
+  accepts_nested_attributes_for :avatar
 
   VALID_EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :email, presence: true

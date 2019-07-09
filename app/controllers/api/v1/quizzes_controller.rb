@@ -16,7 +16,8 @@ module Api
             created_at: quiz.created_at,
             updated_at: quiz.updated_at,
             published: quiz.published,
-            author_name: quiz.author.name } }
+            author_name: quiz.author.name,
+            author_avatar: quiz.author.avatar } }
 
         render json: @json
       end

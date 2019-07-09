@@ -5,16 +5,29 @@ module Api
       before_action :authorize_access_request!, only: [:update, :show_mypage]
 
       def show
-        render json: @user
+        @combination = { user: @user, encoded_image: @user.avatar.encode }
+        render json: @combination
       end
 
       def update
         @user = current_user
-        if @user.update(user_params)
-          render json: @user
+        @avatar = current_user.avatar
+
+        @user.assign_attributes(user_params)
+        image_file = Avatar.decode_to_imagefile(avatar_params[:image])
+        @avatar.assign_attributes(image: image_file)
+
+        # 一つのモデルに集約が必要(Issue#11)
+        if @user.valid? && @avatar.valid?
+          if @user.save && @avatar.save
+            render json: @user
+          else
+            render json: { error: @user.errors.full_messages + @avatar.errors.full_messages }, status: :unprocessable_entity
+          end
         else
-          render json: @user.errors, status: :unprocessable_entity
+          render json: { error: @user.errors.full_messages + @avatar.errors.full_messages }, status: :unprocessable_entity
         end
+        
       end
 
       def show_mypage
@@ -29,10 +42,13 @@ module Api
         @combination = { my_quizzes: @my_quizzes,
                          trying_quizzes: @trying_quizzes,
                          solved_quizzes: @solved_quizzes,
-                         current_user: current_user }
+                         current_user: current_user,
+                         encoded_image: current_user.avatar.encode
+                       }
+
         render json: @combination 
       end
-
+      
       private
 
         def set_user
@@ -41,6 +57,10 @@ module Api
 
         def user_params
           params.require(:user).permit(:name, :description)
+        end
+
+        def avatar_params
+          params.require(:avatar).permit(:image)
         end
       
     end
