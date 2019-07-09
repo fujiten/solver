@@ -26,6 +26,10 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'rack-cors'
 gem 'jwt_sessions', '~> 2.3'
 gem "yard", ">= 0.9.20"
+gem 'shrine'
+gem 'image_processing'
+gem 'mini_magick'
+gem "aws-sdk-s3"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

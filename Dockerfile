@@ -14,7 +14,8 @@ RUN apk update && \
         pcre-dev \
         libffi-dev \
         postgresql-dev \
-        tzdata
+        tzdata \
+        imagemagick
 
 RUN gem install bundler --no-document && \
     gem update --system

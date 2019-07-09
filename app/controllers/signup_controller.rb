@@ -2,6 +2,7 @@ class SignupController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.build_avatar
     if user.save
       payload  = { user_id: user.id }
       session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
@@ -20,7 +21,7 @@ class SignupController < ApplicationController
   private
 
   def user_params
-    params.permit(:email, :name, :password, :password_confirmation)
+    params.fetch(:user, {}).permit(:email, :name, :password, :password_confirmation)
   end
   
 end
