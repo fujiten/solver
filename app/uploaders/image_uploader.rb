@@ -16,7 +16,6 @@ class ImageUploader < Shrine
 
     Attacher.validate do
       validate_max_size 5 * 1024 * 1024, message: '5MBを超える画像はアップロードできません。'
-      validate_mime_type_inclusion %w(image/jpeg image/png)
     end
 
     versions # return the hash of processed files
