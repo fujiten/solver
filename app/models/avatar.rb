@@ -5,7 +5,7 @@ class Avatar < ApplicationRecord
   validates :user_id, uniqueness: true
 
   def encode
-    encoded_image = Base64.strict_encode64(File.open(avatar_url).read)
+    encoded_image = Base64.strict_encode64(open(avatar_url).read)
     prefix = 'data:image/png;base64,'
     prefix + encoded_image
   end
