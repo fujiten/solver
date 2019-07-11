@@ -5,7 +5,7 @@ class Quiz < ApplicationRecord
   has_many :quiz_statuses, dependent: :destroy
   has_many :tried_users, through: :quiz_statuses, source: :user
 
-  has_many :choices
+  has_many :choices, dependent: :destroy
 
   enum published: { drafted: 0, published: 1 }
 

@@ -17,7 +17,7 @@ module Api
             updated_at: quiz.updated_at,
             published: quiz.published,
             author_name: quiz.author.name,
-            author_avatar: quiz.author.avatar } }
+            author_avatar: quiz.author.avatar.encode } }
 
         render json: @json
       end
