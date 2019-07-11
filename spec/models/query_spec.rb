@@ -33,13 +33,13 @@ RSpec.describe Query, type: :model do
     end
 
     it "is invalid if a revealed_point is more than 1000(開示ポイントが1000以上だと不正になる)" do
-      query = FactoryBot.build(:query, revealed_point: (Random.rand * 10 ** 5).ceil)
+      query = FactoryBot.build(:query, revealed_point: (Random.rand * 10 ** 6).ceil)
       query.valid?
       expect(query.errors[:revealed_point]).to include("は1000より小さい値にしてください")
     end
 
     it "is invalid if a point is more than 100(獲得ポイントが100以上だと不正になる)" do
-      query = FactoryBot.build(:query, point: (Random.rand * 10 **4 ).ceil)
+      query = FactoryBot.build(:query, point: (Random.rand * 10 ** 5 ).ceil)
       query.valid?
       expect(query.errors[:point]).to include("は100より小さい値にしてください")
     end
