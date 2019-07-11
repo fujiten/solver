@@ -11,7 +11,7 @@ class SigninController < ApplicationController
                         value: tokens[:access],
                         httponly: true,
                         secure: Rails.env.production?)
-      render json: { csrf: tokens[:csrf], access: tokens[:access] }
+      render json: { csrf: tokens[:csrf], access: tokens[:access], my_avatar: user.avatar.encode }
     else
       # this method is inherited from ApplicationController
       not_authorized

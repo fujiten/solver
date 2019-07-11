@@ -5,7 +5,7 @@ module Api
       before_action :authorize_access_request!, only: [:update, :show_mypage]
 
       def show
-        @combination = { user: @user, encoded_image: @user.avatar.encode }
+        @combination = { user: @user, avatar: @user.avatar.encode }
         render json: @combination
       end
 
@@ -43,7 +43,7 @@ module Api
                          trying_quizzes: @trying_quizzes,
                          solved_quizzes: @solved_quizzes,
                          current_user: current_user,
-                         encoded_image: current_user.avatar.encode
+                         avatar: current_user.avatar.encode
                        }
 
         render json: @combination 
