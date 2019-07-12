@@ -42,7 +42,7 @@ module Api
         # access_expireが切れていた場合、isOthersフラグが立ってしまう不具合要修正
         begin
           authorize_access_request!
-          if @author.id == payload['user_id']
+          if @quiz.author.id == payload['user_id']
             @combination[:isMine] = true
           else
             @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload['user_id'])
