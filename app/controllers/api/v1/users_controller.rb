@@ -31,7 +31,14 @@ module Api
       end
 
       def show_mypage
-
+        p request.headers['HTTP_COOKIE']
+        p 123
+        request.headers.env.keys.each do |k|
+          puts k
+        end
+        p request.headers['rack.request.cookie_hash']
+        p 123
+        p payload
         # draftedとpublishedをそれぞれグループ化してクライアントに返す。
         @my_quizzes = current_user.my_quizzes.group_by{ |quiz| quiz.published }
 

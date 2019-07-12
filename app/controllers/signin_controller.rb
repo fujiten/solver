@@ -7,6 +7,7 @@ class SigninController < ApplicationController
       payload = { user_id: user.id }
       session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
       tokens = session.login
+      p JWTSessions.access_cookie
       response.set_cookie(JWTSessions.access_cookie,
                         value: tokens[:access],
                         httponly: true,
