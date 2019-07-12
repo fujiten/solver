@@ -16,15 +16,25 @@ module Api
             created_at: quiz.created_at,
             updated_at: quiz.updated_at,
             published: quiz.published,
-            author_name: quiz.author.name,
-            author_avatar: quiz.author.avatar.encode } }
+            author: quiz.author,
+            avatar: quiz.author.avatar.encode } }
 
         render json: @json
       end
 
       def show
-        @author = @quiz.author
-        @combination = {quiz: @quiz, author: @author}
+        @quiz_json = 
+          { id: @quiz.id,
+            title: @quiz.title,
+            question: @quiz.question,
+            answer: @quiz.answer,
+            difficulity: @quiz.difficulity,
+            created_at: @quiz.created_at,
+            updated_at: @quiz.updated_at,
+            published: @quiz.published,
+            author: @quiz.author,
+            avatar: @quiz.author.avatar.encode }
+        @combination = { quiz: @quiz_json }
 
         #「ログインしてない場合」はrescueで回収して[:isOthers]（他人クイズ）フラグを立てる。
         #「ログインしている場合」については、条件分岐する。
