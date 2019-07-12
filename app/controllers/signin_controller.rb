@@ -11,8 +11,8 @@ class SigninController < ApplicationController
       response.set_cookie(JWTSessions.access_cookie,
                         value: tokens[:access],
                         httponly: true,
-                        secure: true)
-      render json: { csrf: tokens[:csrf], my_avatar: user.avatar.encode  }
+                        secure: Rails.env.production?)
+      render json: { csrf: tokens[:csrf], my_avatar: user.avatar.encode }
     else
       # this method is inherited from ApplicationController
       not_authorized
