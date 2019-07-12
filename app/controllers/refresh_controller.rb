@@ -8,6 +8,6 @@ class RefreshController < ApplicationController
                         value: tokens[:access],
                         httponly: true,
                         secure: Rails.env.production?)
-    render json: { csrf: tokens[:csrf], access: tokens[:access] }
+    render json: { csrf: tokens[:csrf] }
   end
 end
