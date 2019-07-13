@@ -14,8 +14,7 @@ class SigninController < ApplicationController
                         secure: Rails.env.production?)
       render json: { csrf: tokens[:csrf], my_avatar: user.avatar.encode }
     else
-      # this method is inherited from ApplicationController
-      not_authorized
+      not_found
     end
   end
 
