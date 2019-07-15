@@ -12,7 +12,7 @@ class SigninController < ApplicationController
                         value: tokens[:access],
                         httponly: true,
                         secure: Rails.env.production?)
-      render json: { csrf: tokens[:csrf], my_avatar: user.avatar.encode }
+      render json: { csrf: tokens[:csrf], my_avatar: user.avatar.encode, uid: user.id }
     else
       not_found
     end
