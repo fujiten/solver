@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         end
         
         member do
+          get :show_quiz_status
           post :solve
           patch :update_quiz_status
         end

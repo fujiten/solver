@@ -1,8 +1,8 @@
 module Api 
   module V1
     class QuizzesController < ApplicationController
-      before_action :set_quiz, only: [:show] 
-      before_action :authorize_access_request!, only: [:create, :update, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
+      before_action :set_quiz, only: [:show, :show_quiz_status] 
+      before_action :authorize_access_request!, only: [:create, :update, :show_quiz_status, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
       
       def index
         @quizzes = Quiz.all.published.includes(:author)
@@ -34,27 +34,20 @@ module Api
             published: @quiz.published,
             author: @quiz.author,
             avatar: @quiz.author.avatar.encode }
-        @combination = { quiz: @quiz_json }
+        @json = { quiz: @quiz_json }
 
-        #「ログインしてない場合」はrescueで回収して[:isOthers]（他人クイズ）フラグを立てる。
-        #「ログインしている場合」については、条件分岐する。
-        # （あとでモデル層に処理を委譲します。) 
-        # access_expireが切れていた場合、isOthersフラグが立ってしまう不具合要修正
-        begin
-          authorize_access_request!
-          if @quiz.author.id == payload['user_id']
-            @combination[:isMine] = true
-          else
-            @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload['user_id'])
-            @combination[:quiz_status] = @quiz_status
-            @done_queries = @quiz_status&.done_queries 
-            @combination[:done_queries] = @done_queries
-            @combination[:isOthers] = true
-          end
-        rescue JWTSessions::Errors::Unauthorized
-          @combination[:isOthers] = true
+        render json: @json
+      end
+
+      def show_quiz_status
+        @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload['user_id'])
+        @json = { quiz_status: @quiz_status }
+        if !@quiz_status.nil?
+          @done_queries = @quiz_status.done_queries 
+          @json[:queries] = @queries
+          @json[:done_queries] = @done_queries
         end
-        render json: @combination
+        render json: @json
       end
 
       def create
@@ -91,9 +84,9 @@ module Api
         @quiz_status = QuizStatus.new(user_id: current_user.id, quiz_id: params[:id])
 
         if @quiz_status.save
-          @queries = Quiz.find_by(id: params[:id]).queries
-          @combination = {quiz_status: @quiz_status, queries: @queries}
-          render json: @combination
+          @queries = Quiz.find(params[:id]).queries
+          @json = {quiz_status: @quiz_status, queries: @queries}
+          render json: @json
         else
           render json: @quiz_status.errors, status: :unprocessable_entity
         end
