@@ -39,14 +39,14 @@ module Api
         @trying_quizzes = @grouped_my_quiz_statuses.where(be_solved: false).map{ |status| status.quiz }
         @solved_quizzes = @grouped_my_quiz_statuses.where(be_solved: true).map{ |status| status.quiz }
 
-        @combination = { my_quizzes: @my_quizzes,
-                         trying_quizzes: @trying_quizzes,
-                         solved_quizzes: @solved_quizzes,
-                         current_user: current_user,
-                         avatar: current_user.avatar.encode
-                       }
+        @json = { my_quizzes: @my_quizzes,
+                  trying_quizzes: @trying_quizzes,
+                  solved_quizzes: @solved_quizzes,
+                  current_user: current_user,
+                  avatar: current_user.avatar.encode
+                }
 
-        render json: @combination 
+        render json: @json
       end
       
       private

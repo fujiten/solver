@@ -6,35 +6,13 @@ module Api
       
       def index
         @quizzes = Quiz.all.published.includes(:author)
-
-        @json = @quizzes.map{ |quiz|
-          { id: quiz.id,
-            title: quiz.title,
-            question: quiz.question,
-            answer: quiz.answer,
-            difficulity: quiz.difficulity,
-            created_at: quiz.created_at,
-            updated_at: quiz.updated_at,
-            published: quiz.published,
-            author: quiz.author,
-            avatar: quiz.author.avatar.encode } }
+        @json = Quiz.arrange_quizzes(@quizzes)
 
         render json: @json
       end
 
       def show
-        @quiz_json = 
-          { id: @quiz.id,
-            title: @quiz.title,
-            question: @quiz.question,
-            answer: @quiz.answer,
-            difficulity: @quiz.difficulity,
-            created_at: @quiz.created_at,
-            updated_at: @quiz.updated_at,
-            published: @quiz.published,
-            author: @quiz.author,
-            avatar: @quiz.author.avatar.encode }
-        @json = { quiz: @quiz_json }
+        @json = { quiz: @quiz.arrange_me_and_fetch_associations }
 
         render json: @json
       end
@@ -80,7 +58,6 @@ module Api
 
       def solve
 
-        #ログインしているときの処理
         @quiz_status = QuizStatus.new(user_id: current_user.id, quiz_id: params[:id])
 
         if @quiz_status.save

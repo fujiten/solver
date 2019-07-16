@@ -15,4 +15,25 @@ class Quiz < ApplicationRecord
                         length: { maximum: 400 }
   validates :answer,    presence: true,
                         length: { maximum: 1000 }
+
+  def arrange_me_and_fetch_associations
+    json = 
+    { id:           self.id,
+      title:        self.title,
+      question:     self.question,
+      answer:       self.answer,
+      difficulity:  self.difficulity,
+      created_at:   self.created_at,
+      updated_at:   self.updated_at,
+      published:    self.published,
+      author:       self.author,
+      avatar:       self.author.avatar.encode }
+    json
+  end
+
+  def self.arrange_quizzes(quizzes)
+    json = quizzes.map{ |quiz| quiz.arrange_me_and_fetch_associations }
+    json
+  end
+
 end
