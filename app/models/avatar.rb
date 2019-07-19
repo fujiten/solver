@@ -25,7 +25,7 @@ class Avatar < ApplicationRecord
   private
 
     def avatar_url
-      if image
+      if image.try(:[], :icon)
         url = image[:icon].url
         url = 'public/' + url if Rails.env.development?
         url

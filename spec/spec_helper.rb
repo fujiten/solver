@@ -25,6 +25,8 @@ RSpec.configure do |config|
     #     # => "be bigger than 2 and smaller than 4"
     # ...rather than:
     #     # => "be bigger than 2"
+    config.filter_run :focus => true
+    config.run_all_when_everything_filtered = true
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 

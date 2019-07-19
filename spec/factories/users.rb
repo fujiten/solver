@@ -5,5 +5,8 @@ FactoryBot.define do
     email                 { Faker::Internet.email }
     password              { password }
     password_confirmation { password }
+    after :create do |user|
+      create :avatar, user: user             # has_one
+    end
   end
 end
