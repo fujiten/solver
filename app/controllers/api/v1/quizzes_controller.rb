@@ -40,7 +40,10 @@ module Api
 
       def update
         @quiz = current_user.my_quizzes.find(params[:id])
-        if @quiz.update(quiz_params)
+        image = ImageEncodable.decode_to_imagefile(quiz_params[:image])
+
+        
+        if @quiz.update(title: quiz_params[:title], question: quiz_params[:question], answer: quiz_params[:answer], image: image)
           render json: @quiz
         else
           render json: @quiz.errors, status: :unprocessable_entity
@@ -89,7 +92,7 @@ module Api
 
         #current_userを使っているため、authorize_access_request!メソッドにより予めpayloadをする必要あり。
         def quiz_params
-          params.fetch(:quiz, {}).permit(:title, :question, :answer, :diffculity, :published).merge(user_id: current_user.id)
+          params.fetch(:quiz, {}).permit(:title, :question, :answer, :diffculity, :published, :image).merge(user_id: current_user.id)
         end
 
         def quiz_status_params

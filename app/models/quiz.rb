@@ -1,4 +1,7 @@
 class Quiz < ApplicationRecord
+  include ImageUploader::Attachment.new(:image)
+  include ImageEncodable
+
   belongs_to :author, class_name: "User", foreign_key: "user_id"
   has_many :queries, dependent: :destroy
 
@@ -26,8 +29,9 @@ class Quiz < ApplicationRecord
       created_at:   self.created_at,
       updated_at:   self.updated_at,
       published:    self.published,
+      image:        self.encode(:medium),
       author:       self.author,
-      avatar:       self.author.avatar.encode }
+      avatar:       self.author.avatar.encode(:icon) }
     json
   end
 
