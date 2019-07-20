@@ -29,7 +29,7 @@ module Api
       end
 
       def create
-        @quiz = Quiz.new(quiz_params)
+        @quiz = Quiz.new(quiz_params.merge(image: nil))
 
         if @quiz.save
           render json: @quiz, status: :created

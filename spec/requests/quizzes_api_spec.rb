@@ -45,8 +45,8 @@ RSpec.describe "Quizzes", type: :request do
     let(:quiz_params) {
       { title:           Faker::Lorem.word,
         question:        Faker::Lorem.sentence,
-        answer:          Faker::Lorem.sentence }
-    }
+        answer:          Faker::Lorem.sentence,
+        image:           'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=' } }
 
     def sign_in(user)
       post signin_path, params: { email: user.email, password: user.password }
@@ -181,7 +181,7 @@ RSpec.describe "Quizzes", type: :request do
 
         expect(response).to have_http_status(401)
       end
-      
+
     end
   end
 end
