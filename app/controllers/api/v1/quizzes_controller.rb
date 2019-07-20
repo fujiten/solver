@@ -40,10 +40,14 @@ module Api
 
       def update
         @quiz = current_user.my_quizzes.find(params[:id])
-        image = ImageEncodable.decode_to_imagefile(quiz_params[:image])
-
         
-        if @quiz.update(title: quiz_params[:title], question: quiz_params[:question], answer: quiz_params[:answer], image: image)
+        if quiz_params[:image]
+          update_params = quiz_params.merge({image: ImageEncodable.decode_to_imagefile(quiz_params[:image])})
+        else
+          update_params = quiz_params
+        end
+        
+        if @quiz.update(update_params)
           render json: @quiz
         else
           render json: @quiz.errors, status: :unprocessable_entity
