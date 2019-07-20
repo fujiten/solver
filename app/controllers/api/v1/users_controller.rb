@@ -5,8 +5,8 @@ module Api
       before_action :authorize_access_request!, only: [:update, :show_mypage]
 
       def show
-        @combination = { user: @user, avatar: @user.avatar.encode }
-        render json: @combination
+        @json = { user: @user, avatar: @user.avatar.encode(:icon) }
+        render json: @json
       end
 
       def update
@@ -14,13 +14,13 @@ module Api
         @avatar = current_user.avatar
 
         @user.assign_attributes(user_params)
-        image_file = Avatar.decode_to_imagefile(avatar_params[:image])
+        image_file = ImageEncodable.decode_to_imagefile(avatar_params[:image])
         @avatar.assign_attributes(image: image_file)
 
         # 一つのモデルに集約が必要(Issue#11)
         if @user.valid? && @avatar.valid?
           if @user.save && @avatar.save
-            render json: @user
+            render json: { user: @user, avatar: @avatar.encode(:icon) } 
           else
             render json: { error: @user.errors.full_messages + @avatar.errors.full_messages }, status: :unprocessable_entity
           end
@@ -43,7 +43,7 @@ module Api
                   trying_quizzes: @trying_quizzes,
                   solved_quizzes: @solved_quizzes,
                   current_user: current_user,
-                  avatar: current_user.avatar.encode
+                  avatar: current_user.avatar.encode(:icon)
                 }
 
         render json: @json

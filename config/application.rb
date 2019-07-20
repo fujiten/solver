@@ -37,5 +37,7 @@ module App
     config.time_zone = 'Tokyo'
 
     config.x.cors_allowed_origins = ENV.fetch('CORS_ALLOWED_ORIGINS', 'http://localhost:8080')
+
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end
