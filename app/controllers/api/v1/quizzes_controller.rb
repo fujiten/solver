@@ -5,7 +5,7 @@ module Api
       before_action :authorize_access_request!, only: [:create, :update, :show_quiz_status, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
       
       def index
-        @quizzes = Quiz.all.published.includes(:author)
+        @quizzes = Quiz.all.published.includes(author: :avatar)
         @json = Quiz.arrange_quizzes(@quizzes)
 
         render json: @json
@@ -40,7 +40,7 @@ module Api
 
       def update
         @quiz = current_user.my_quizzes.find(params[:id])
-        
+
         if quiz_params[:image]
           update_params = quiz_params.merge({image: ImageEncodable.decode_to_imagefile(quiz_params[:image])})
         else
