@@ -10,6 +10,7 @@ Vue側のGithub(https://github.com/fujiten/seasolver_front)
 ## テストユーザー
 
 Eメール： testuser@test.com
+
 パスワード: testuser
 
 ## 
