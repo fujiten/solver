@@ -22,6 +22,8 @@ class AuthenticationController < ApplicationController
       access_token, { :scheme => :query_string }
     )
 
+    p 456
+
     case twitter_response
     when Net::HTTPSuccess
       user_info = JSON.parse(twitter_response.body)
