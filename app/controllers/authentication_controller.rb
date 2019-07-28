@@ -45,21 +45,21 @@ class AuthenticationController < ApplicationController
 
           response.set_cookie('signedIn',
           value: true,
-          domain: "localhost",
+          domain: "www.seasolver.club",
           path: "/",
           secure: Rails.env.production?)
 
           response.set_cookie('token_validness',
           value: true,
-          domain: "localhost",
+          domain: "www.seasolver.club",
           path: "/",
           secure: Rails.env.production?)
 
-          redirect_to 'http://localhost:8080/'
+          redirect_to 'http://www.seasolver.club/'
 
         else
 
-          redirect_to 'http://localhost:8080/'
+          redirect_to 'http://www.seasolver.club/'
 
         end
 
@@ -122,7 +122,7 @@ class AuthenticationController < ApplicationController
     else
   
       request_token = consumer.get_request_token(
-        :oauth_callback => "http://localhost:3000/auth/twitter/callback"
+        :oauth_callback => "https://api.seasolver.club/auth/twitter/callback"
       )
 
       response.set_cookie("request_token",
@@ -158,7 +158,7 @@ class AuthenticationController < ApplicationController
         response.set_cookie(key,
           value: value,
           httponly: true,
-          domain: "localhost",
+          domain: "www.seasolver.club",
           path: "/",
           secure: Rails.env.production?)
       end
