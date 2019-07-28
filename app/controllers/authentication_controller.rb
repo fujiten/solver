@@ -31,18 +31,21 @@ class AuthenticationController < ApplicationController
 
     case twitter_response
     when Net::HTTPSuccess
+      p 678
       user_info = JSON.parse(twitter_response.body)
+      p user_info
 
       if user_info["screen_name"]
 
         user = User.find_or_create(user_info, 'twitter')
+        p user
 
         if user.persisted?
 
           payload = { user_id: user.id }
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
-        
+          p 12737
           cookie_key_value_pairs = {
             JWTSessions.access_cookie => tokens[:access],
             'oauth_token2' => access_token.params["oauth_token"],
