@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: [:show]
-      before_action :authorize_access_request!, only: [:update, :show_mypage]
+      before_action :authorize_access_request!, only: [:update, :show_me, :show_mypage]
 
       def show
         @json = { user: @user, avatar: @user.avatar.encode(:icon) }
@@ -28,6 +28,12 @@ module Api
           render json: { error: @user.errors.full_messages + @avatar.errors.full_messages }, status: :unprocessable_entity
         end
         
+      end
+
+      def show_me
+        render json: { csrf: request.cookies['csrf'],
+                       my_avatar: current_user.avatar.encode(:icon), 
+                       uid: current_user.id  }
       end
 
       def show_mypage
