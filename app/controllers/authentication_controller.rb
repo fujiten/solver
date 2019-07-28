@@ -10,11 +10,15 @@ class AuthenticationController < ApplicationController
       request.cookies['request_token_secret']
     )
 
+    p request_token
+
     access_token = request_token.get_access_token(
       {},
       :oauth_token => params[:oauth_token],
       :oauth_verifier => params[:oauth_verifier]
     )
+
+    p access_token
 
     twitter_response = consumer.request(
       :get,
@@ -23,6 +27,7 @@ class AuthenticationController < ApplicationController
     )
 
     p 456
+    p twitter_response
 
     case twitter_response
     when Net::HTTPSuccess
@@ -76,7 +81,8 @@ class AuthenticationController < ApplicationController
       end
 
     else
-        #"Failed to get user info via OAuth"
+      p 777
+      #"Failed to get user info via OAuth"
     end
 
   end
