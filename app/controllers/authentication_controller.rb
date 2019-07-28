@@ -2,15 +2,11 @@ class AuthenticationController < ApplicationController
 
   def twitter
 
-    p 123
-
     request_token = OAuth::RequestToken.new(
       consumer,
       request.cookies['request_token'],
       request.cookies['request_token_secret']
     )
-
-    p request_token
 
     access_token = request_token.get_access_token(
       {},
@@ -18,22 +14,15 @@ class AuthenticationController < ApplicationController
       :oauth_verifier => params[:oauth_verifier]
     )
 
-    p access_token
-
     twitter_response = consumer.request(
       :get,
       '/1.1/account/verify_credentials.json',
       access_token, { :scheme => :query_string }
     )
 
-    p 456
-    p twitter_response
-
     case twitter_response
     when Net::HTTPSuccess
-      p 678
       user_info = JSON.parse(twitter_response.body)
-      p user_info
 
       if user_info["screen_name"]
 
@@ -45,7 +34,6 @@ class AuthenticationController < ApplicationController
           payload = { user_id: user.id }
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
-          p 12737
           cookie_key_value_pairs = {
             JWTSessions.access_cookie => tokens[:access],
             'oauth_token2' => access_token.params["oauth_token"],
@@ -67,13 +55,9 @@ class AuthenticationController < ApplicationController
           path: "/",
           secure: Rails.env.production?)
 
-          p 'hello'
-
           redirect_to 'https://www.seasolver.club/'
 
         else
-
-          p 123123
 
           redirect_to 'https://www.seasolver.club/'
 
@@ -84,7 +68,6 @@ class AuthenticationController < ApplicationController
       end
 
     else
-      p 777
       #"Failed to get user info via OAuth"
     end
 
