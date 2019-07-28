@@ -147,7 +147,7 @@ class AuthenticationController < ApplicationController
 
     def consumer
       @consumer ||= OAuth::Consumer.new(
-        ENV['TWITTER_COUSUMER_KEY'],
+        ENV['TWITTER_CONSUMER_KEY'],
         ENV['TWITTER_CONSUMER_KEY_SECRET'],
         { :site => "https://api.twitter.com" }
       )
