@@ -45,12 +45,14 @@ class AuthenticationController < ApplicationController
 
           response.set_cookie('signedIn',
           value: true,
-          domain: "seasolver.club",
+          domain: ".seasolver.club",
+          path: "/",
           secure: Rails.env.production?)
 
           response.set_cookie('token_validness',
           value: true,
-          domain: "seasolver.club",
+          domain: ".seasolver.club",
+          path: "/",
           secure: Rails.env.production?)
 
           redirect_to 'https://www.seasolver.club/'
@@ -156,7 +158,8 @@ class AuthenticationController < ApplicationController
         response.set_cookie(key,
           value: value,
           httponly: true,
-          domain: "seasolver.club",
+          domain: ".seasolver.club",
+          path: "/",
           secure: Rails.env.production?)
       end
     end
