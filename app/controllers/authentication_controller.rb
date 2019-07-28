@@ -2,6 +2,8 @@ class AuthenticationController < ApplicationController
 
   def twitter
 
+    p 123
+
     request_token = OAuth::RequestToken.new(
       consumer,
       request.cookies['request_token'],
@@ -55,11 +57,15 @@ class AuthenticationController < ApplicationController
           path: "/",
           secure: Rails.env.production?)
 
-          redirect_to 'http://www.seasolver.club/'
+          p 'hello'
+
+          redirect_to 'https://www.seasolver.club/'
 
         else
 
-          redirect_to 'http://www.seasolver.club/'
+          p 456
+
+          redirect_to 'https://www.seasolver.club/'
 
         end
 
