@@ -31,6 +31,11 @@ module Api
       end
 
       def show_me
+        response.set_cookie(JWTSessions.access_cookie,
+        value: request.cookies['jwt_access'],
+        httponly: true,
+        secure: Rails.env.production?)
+
         render json: { csrf: request.cookies['csrf'],
                        my_avatar: current_user.avatar.encode(:icon), 
                        uid: current_user.id  }

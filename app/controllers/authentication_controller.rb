@@ -35,13 +35,19 @@ class AuthenticationController < ApplicationController
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
           cookie_key_value_pairs = {
-            JWTSessions.access_cookie => tokens[:access],
+
             'oauth_token2' => access_token.params["oauth_token"],
             'oauth_token_secret' => access_token.params["oauth_token_secret"],
             'csrf' => tokens[:csrf]
           }
 
           set_cookies_at_once(response, cookie_key_value_pairs)
+
+          response.set_cookie(JWTSessions.access_cookie,
+          value: tokens[:access],
+          domain: ".seasolver.club",
+          path: "/",
+          secure: Rails.env.production?)
 
           response.set_cookie('signedIn',
           value: true,
