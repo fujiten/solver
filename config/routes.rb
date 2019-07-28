@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       resources :users do
         collection do
           get :show_mypage
+          get :show_me
         end
       end
 
@@ -36,5 +37,7 @@ Rails.application.routes.draw do
   post "signin", controller: :signin, action: :create
   post "signup", controller: :signup, action: :create
   delete "signin", controller: :signin, action: :destroy
+  get '/auth/twitter/callback', to: 'authentication#twitter'
+  get '/authenticate', to: 'authentication#authenticate'
 
 end

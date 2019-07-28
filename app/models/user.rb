@@ -18,5 +18,17 @@ class User < ApplicationRecord
                     length: { maximum: 16 }
   validates :password, length: { minimum: 6, maximum: 30 }, allow_blank: true
                     
+  def self.find_or_create(user_info, provider)
+    where(provider: provider, uid: user_info['id']).first_or_create do |user|
+      if user_info['email']
+        user.email = user_info['email']
+      else
+        user.email = "uid.#{user_info['id']}@example.com"
+      end
+      user.name = user_info['name']
+      user.password = Faker::Internet.password(10, 20)
+      user.build_avatar(image: open(user_info['profile_image_url_https']))
+    end
+  end
 
 end
