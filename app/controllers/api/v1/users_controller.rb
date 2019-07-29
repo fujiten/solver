@@ -31,7 +31,7 @@ module Api
       end
 
       def show_me
-        response.set_cookie(ac_token,
+        response.set_cookie('ac_token',
         value: nil,
         domain: ".seasolver.club",
         path: "/",
