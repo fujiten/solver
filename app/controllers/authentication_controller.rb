@@ -43,7 +43,7 @@ class AuthenticationController < ApplicationController
 
           set_cookies_at_once(response, cookie_key_value_pairs)
 
-          response.set_cookie(JWTSessions.access_cookie,
+          response.set_cookie('ac_token',
           value: tokens[:access],
           domain: ".seasolver.club",
           path: "/",

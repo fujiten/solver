@@ -31,14 +31,14 @@ module Api
       end
 
       def show_me
-        response.set_cookie(JWTSessions.access_cookie,
+        response.set_cookie(ac_token,
         value: nil,
         domain: ".seasolver.club",
         path: "/",
         secure: Rails.env.production?)
 
         response.set_cookie(JWTSessions.access_cookie,
-        value: request.cookies['jwt_access'],
+        value: request.cookies['ac_token'],
         httponly: true,
         secure: Rails.env.production?)        
 
