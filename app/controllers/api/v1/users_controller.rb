@@ -32,9 +32,15 @@ module Api
 
       def show_me
         response.set_cookie(JWTSessions.access_cookie,
+        value: nil,
+        domain: ".seasolver.club",
+        path: "/",
+        secure: Rails.env.production?)
+
+        response.set_cookie(JWTSessions.access_cookie,
         value: request.cookies['jwt_access'],
         httponly: true,
-        secure: Rails.env.production?)
+        secure: Rails.env.production?)        
 
         render json: { csrf: request.cookies['csrf'],
                        my_avatar: current_user.avatar.encode(:icon), 
