@@ -47,6 +47,7 @@ class AuthenticationController < ApplicationController
           value: tokens[:access],
           domain: ".seasolver.club",
           path: "/",
+          expires: Time.now + 30.seconds
           secure: Rails.env.production?)
 
           response.set_cookie('signedIn',
