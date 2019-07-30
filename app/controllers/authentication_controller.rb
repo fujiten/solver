@@ -27,7 +27,6 @@ class AuthenticationController < ApplicationController
       if user_info["screen_name"]
 
         user = User.find_or_create(user_info, 'twitter')
-        p user
 
         if user.persisted?
 
@@ -38,28 +37,29 @@ class AuthenticationController < ApplicationController
 
             'oauth_token2' => access_token.params["oauth_token"],
             'oauth_token_secret' => access_token.params["oauth_token_secret"],
-            'csrf' => tokens[:csrf]
+            'csrf' => tokens[:csrf],
+            'ac_token' => tokens[:access]
           }
 
           set_cookies_at_once(response, cookie_key_value_pairs)
 
-          response.set_cookie('ac_token',
-          value: tokens[:access],
-          domain: ".seasolver.club",
+          response.set_cookie('signedIn',
+          value: true,
+          domain: ENV["BASE_DOMAIN"],
           path: "/",
           secure: Rails.env.production?)
 
           response.set_cookie('token_validness',
           value: true,
-          domain: ".seasolver.club",
+          domain: ENV["BASE_DOMAIN"],
           path: "/",
           secure: Rails.env.production?)
 
-          redirect_to 'https://www.seasolver.club/'
+          redirect_to ENV['CLIANT_SIDE_TOP_PAGE']
 
         else
 
-          redirect_to 'https://www.seasolver.club/'
+          redirect_to ENV['CLIANT_SIDE_TOP_PAGE']
 
         end
 
@@ -122,7 +122,7 @@ class AuthenticationController < ApplicationController
     else
   
       request_token = consumer.get_request_token(
-        :oauth_callback => "https://api.seasolver.club/auth/twitter/callback"
+        oauth_callback: ENV['TWITTER_CALLBACK_URL']
       )
 
       response.set_cookie("request_token",
@@ -146,6 +146,7 @@ class AuthenticationController < ApplicationController
   private
 
     def consumer
+      p ENV['TWITTER_CONSUMER_KEY']
       @consumer ||= OAuth::Consumer.new(
         ENV['TWITTER_CONSUMER_KEY'],
         ENV['TWITTER_CONSUMER_KEY_SECRET'],
@@ -158,7 +159,7 @@ class AuthenticationController < ApplicationController
         response.set_cookie(key,
           value: value,
           httponly: true,
-          domain: ".seasolver.club",
+          domain: ENV["BASE_DOMAIN"],
           path: "/",
           secure: Rails.env.production?)
       end

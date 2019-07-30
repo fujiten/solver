@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: [:show]
-      before_action :authorize_access_request!, only: [:update, :show_me, :show_mypage]
+      before_action :authorize_access_request!, only: [:update, :show_mypage]
 
       def show
         @json = { user: @user, avatar: @user.avatar.encode(:icon) }
@@ -31,8 +31,13 @@ module Api
       end
 
       def show_me
+        ac_token = request.cookies['ac_token']
+        request.headers['Authorization'] = "Bearer #{ac_token}"
+        authorize_access_request!
+
         response.set_cookie('ac_token',
         value: nil,
+        httponly: true,
         domain: ".seasolver.club",
         path: "/",
         secure: Rails.env.production?)
@@ -40,7 +45,7 @@ module Api
         response.set_cookie(JWTSessions.access_cookie,
         value: request.cookies['ac_token'],
         httponly: true,
-        secure: Rails.env.production?)        
+        secure: Rails.env.production?) 
 
         render json: { csrf: request.cookies['csrf'],
                        my_avatar: current_user.avatar.encode(:icon), 
