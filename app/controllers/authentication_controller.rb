@@ -49,12 +49,6 @@ class AuthenticationController < ApplicationController
           path: "/",
           secure: Rails.env.production?)
 
-          response.set_cookie('signedIn',
-          value: true,
-          domain: ".seasolver.club",
-          path: "/",
-          secure: Rails.env.production?)
-
           response.set_cookie('token_validness',
           value: true,
           domain: ".seasolver.club",
