@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: touch .env
+          command: touch .env
+      - run:
           name: docker-compose build
           command: docker-compose build
       - run:
@@ -30,6 +33,9 @@ jobs:
       image: circleci/classic:edge
     steps:
       - checkout
+      - run:
+          name: touch .env
+          command: touch .env
       - run:
           name: Build docker image
           command: docker build --rm=false -t registry.heroku.com/${HEROKU_APP_NAME}/web .
