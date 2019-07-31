@@ -49,11 +49,7 @@ class AuthenticationController < ApplicationController
           path: "/",
           secure: Rails.env.production?)
 
-          response.set_cookie('token_validness',
-          value: true,
-          domain: ENV["BASE_DOMAIN"],
-          path: "/",
-          secure: Rails.env.production?)
+          set_cookie_at_token_validness(true)
 
           redirect_to ENV['CLIANT_SIDE_TOP_PAGE']
 
@@ -111,10 +107,12 @@ class AuthenticationController < ApplicationController
           render json: { status: "authentication_success", csrf: tokens[:csrf], my_avatar: user.avatar.encode(:icon), uid: user.id }
 
         else
+          set_cookie_at_token_validness(false)
           render json: { status: "authentication_failed" }
         end
 
       when  Net::HTTPUnauthorized
+        set_cookie_at_token_validness(false)
         render json: { status: "authentication_failed" }
       end
 
@@ -167,6 +165,15 @@ class AuthenticationController < ApplicationController
 
     def true?(value)
       value.to_s == "true"
+    end
+
+    def set_cookie_at_token_validness(boolian)
+      response.set_cookie('token_validness',
+        value: boolian,
+        httponly: true,
+        domain: ENV["BASE_DOMAIN"],
+        path: "/",
+        secure: Rails.env.production?)
     end
 
 end
