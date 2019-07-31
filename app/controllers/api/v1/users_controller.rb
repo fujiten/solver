@@ -43,7 +43,7 @@ module Api
         secure: Rails.env.production?)
 
         response.set_cookie('signedIn',
-        value: false,
+        value: nil,
         domain: ".seasolver.club",
         path: "/",
         secure: Rails.env.production?)
