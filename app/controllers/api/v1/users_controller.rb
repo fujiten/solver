@@ -42,6 +42,12 @@ module Api
         path: "/",
         secure: Rails.env.production?)
 
+        response.set_cookie('signedIn',
+        value: false,
+        domain: ".seasolver.club",
+        path: "/",
+        secure: Rails.env.production?)
+
         response.set_cookie(JWTSessions.access_cookie,
         value: request.cookies['ac_token'],
         httponly: true,
