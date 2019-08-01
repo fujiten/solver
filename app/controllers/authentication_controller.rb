@@ -2,23 +2,11 @@ class AuthenticationController < ApplicationController
 
   def twitter
 
-    request_token = OAuth::RequestToken.new(
-      consumer,
-      request.cookies['request_token'],
-      request.cookies['request_token_secret']
-    )
+    twitter_login = Authentication::TwitterLogin.new
 
-    access_token = request_token.get_access_token(
-      {},
-      :oauth_token => params[:oauth_token],
-      :oauth_verifier => params[:oauth_verifier]
-    )
-
-    twitter_response = consumer.request(
-      :get,
-      '/1.1/account/verify_credentials.json',
-      access_token, { :scheme => :query_string }
-    )
+    request_token = twitter_login.fetch_request_token_after_callback(request)
+    access_token= twitter_login.get_access_token_from(request_token, params)
+    twitter_response = twitter_login.get_account_info(access_token)
 
     case twitter_response
     when Net::HTTPSuccess
@@ -34,7 +22,6 @@ class AuthenticationController < ApplicationController
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
           cookie_key_value_pairs = {
-
             'oauth_token2' => access_token.params["oauth_token"],
             'oauth_token_secret' => access_token.params["oauth_token_secret"],
             'csrf' => tokens[:csrf],
@@ -44,10 +31,10 @@ class AuthenticationController < ApplicationController
           set_cookies_at_once(response, cookie_key_value_pairs)
 
           response.set_cookie('signedIn',
-          value: true,
-          domain: ENV["BASE_DOMAIN"],
-          path: "/",
-          secure: Rails.env.production?)
+            value: true,
+            domain: ENV["BASE_DOMAIN"],
+            path: "/",
+            secure: Rails.env.production?)
 
           set_cookie_at_token_validness(true)
 
@@ -60,11 +47,13 @@ class AuthenticationController < ApplicationController
         end
 
       else
-        #"Authentication failed"
+        set_cookie_at_token_validness(false)
+        render json: { status: "authentication_failed" }
       end
 
     else
-      #"Failed to get user info via OAuth"
+      set_cookie_at_token_validness(false)
+      render json: { status: "authentication_failed" }
     end
 
   end
@@ -73,19 +62,11 @@ class AuthenticationController < ApplicationController
 
     # クッキー内にアクセストークン発行のためのトークンがあれば、それを利用して認可をスキップ
     if true?(request.cookies["token_validness"]) && request.cookies["oauth_token2"] && request.cookies['oauth_token_secret']
-
-      access_token = OAuth::AccessToken.new(
-        consumer,
-        request.cookies['oauth_token2'],
-        request.cookies['oauth_token_secret']
-      )
       
+      twitter_login = Authentication::TwitterLogin.new
 
-      twitter_response = consumer.request(
-        :get,
-        '/1.1/account/verify_credentials.json',
-        access_token, { :scheme => :query_string }
-      )
+      access_token = twitter_login.get_access_token(request.cookies['oauth_token2'], request.cookies['oauth_token_secret'])
+      twitter_response = twitter_login.get_account_info(access_token)
 
       case twitter_response
       when Net::HTTPSuccess
@@ -118,39 +99,19 @@ class AuthenticationController < ApplicationController
 
     # クッキーに認可のためのトークンがない場合は、認可のためのコールバックURLを返答する
     else
-  
-      request_token = consumer.get_request_token(
-        oauth_callback: ENV['TWITTER_CALLBACK_URL']
-      )
+      twitter_login = Authentication::TwitterLogin.new
+      request_token = twitter_login.get_request_token
+      twitter_login.set_request_tokens_in_cookie(response, request_token)
 
-      response.set_cookie("request_token",
-        value: request_token.token,
-        httponly: true,
-        secure: Rails.env.production?)
-
-      response.set_cookie("request_token_secret",
-        value: request_token.secret,
-        httponly: true,
-        secure: Rails.env.production?)
-  
       rtn = {}
       rtn["status"] = 'return_callback_url'
       rtn["oauth_url"] = request_token.authorize_url
-  
+
       render json: rtn
     end
   end
 
   private
-
-    def consumer
-      p ENV['TWITTER_CONSUMER_KEY']
-      @consumer ||= OAuth::Consumer.new(
-        ENV['TWITTER_CONSUMER_KEY'],
-        ENV['TWITTER_CONSUMER_KEY_SECRET'],
-        { :site => "https://api.twitter.com" }
-      )
-    end
 
     def set_cookies_at_once(response, key_value = {})
       key_value.each do |key, value|

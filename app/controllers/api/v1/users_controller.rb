@@ -38,13 +38,13 @@ module Api
         response.set_cookie('ac_token',
         value: nil,
         httponly: true,
-        domain: ".seasolver.club",
+        domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
 
         response.set_cookie('signedIn',
         value: nil,
-        domain: ".seasolver.club",
+        domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
 
@@ -54,7 +54,7 @@ module Api
         secure: Rails.env.production?) 
 
         render json: { csrf: request.cookies['csrf'],
-                       my_avatar: current_user.avatar.encode(:icon), 
+                       my_avatar: current_user.avatar.encode(:icon),
                        uid: current_user.id  }
       end
 
