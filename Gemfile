@@ -28,7 +28,7 @@ gem 'jwt_sessions', '~> 2.3'
 gem "yard", ">= 0.9.20"
 gem 'shrine'
 gem 'image_processing'
-gem 'mini_magick'
+gem "mini_magick", ">= 4.9.4"
 gem "aws-sdk-s3"
 gem 'oauth'
 gem 'faker'
