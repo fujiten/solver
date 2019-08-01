@@ -11,8 +11,8 @@ class Authentication::TwitterLogin
   def get_access_token(oauth_token, oauth_token_secret)
     OAuth::AccessToken.new(
       consumer,
-      request.cookies['oauth_token2'],
-      request.cookies['oauth_token_secret']
+      oauth_token,
+      oauth_token_secret
     )
   end
 
