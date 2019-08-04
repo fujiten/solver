@@ -7,7 +7,6 @@ class User < ApplicationRecord
   has_many :quiz_statuses, dependent: :destroy
   has_many :trying_quizzes, through: :quiz_statuses, source: :quiz
   has_one :avatar, dependent: :destroy
-  accepts_nested_attributes_for :avatar
 
   VALID_EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :email, presence: true
@@ -17,6 +16,17 @@ class User < ApplicationRecord
   validates :name,  presence: true,
                     length: { maximum: 16 }
   validates :password, length: { minimum: 6, maximum: 30 }, allow_blank: true
+
+  def create_user_and_avatar
+    begin
+      ActiveRecord::Base.transaction do
+        save!
+        Avatar.create(user_id: user.id)
+      end
+    rescue => exception
+      false
+    end
+  end
                     
   def self.find_or_create(user_info, provider)
     where(provider: provider, uid: user_info['id']).first_or_create do |user|
