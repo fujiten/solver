@@ -1,8 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Choice, type: :model do
-  describe '#create' do
-    
+  describe "#create" do
+
     it "is valid with a body, a correctness(問題と正解か不正解化があれば正当である)" do
       choice = FactoryBot.build(:choice)
       expect(choice).to be_valid

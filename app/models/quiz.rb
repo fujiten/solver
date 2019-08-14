@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Quiz < ApplicationRecord
   include ImageUploader::Attachment.new(:image)
   include ImageEncodable
@@ -20,7 +22,7 @@ class Quiz < ApplicationRecord
                         length: { maximum: 1000 }
 
   def arrange_me_and_fetch_associations
-    json = 
+    json =
     { id:           self.id,
       title:        self.title,
       question:     self.question,
@@ -36,7 +38,7 @@ class Quiz < ApplicationRecord
   end
 
   def self.arrange_quizzes(quizzes)
-    json = quizzes.map{ |quiz| quiz.arrange_me_and_fetch_associations }
+    json = quizzes.map { |quiz| quiz.arrange_me_and_fetch_associations }
     json
   end
 

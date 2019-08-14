@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   before_save { self.email = email.downcase }
 
@@ -10,7 +12,7 @@ class User < ApplicationRecord
 
   VALID_EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :email, presence: true
-  validates :email, format: { with: VALID_EMAIL_REGEX },                    
+  validates :email, format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false },
                     allow_blank: true
   validates :name,  presence: true,
@@ -27,17 +29,17 @@ class User < ApplicationRecord
       false
     end
   end
-                    
+
   def self.find_or_create(user_info, provider)
-    where(provider: provider, uid: user_info['id']).first_or_create do |user|
-      if user_info['email']
-        user.email = user_info['email']
+    where(provider: provider, uid: user_info["id"]).first_or_create do |user|
+      if user_info["email"]
+        user.email = user_info["email"]
       else
         user.email = "uid.#{user_info['id']}@example.com"
       end
-      user.name = user_info['name']
+      user.name = user_info["name"]
       user.password = Faker::Internet.password(10, 20)
-      user.build_avatar(image: open(user_info['profile_image_url_https']))
+      user.build_avatar(image: open(user_info["profile_image_url_https"]))
     end
   end
 

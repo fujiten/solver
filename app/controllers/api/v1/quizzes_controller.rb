@@ -1,9 +1,11 @@
-module Api 
+# frozen_string_literal: true
+
+module Api
   module V1
     class QuizzesController < ApplicationController
-      before_action :set_quiz, only: [:show, :show_quiz_status] 
+      before_action :set_quiz, only: [:show, :show_quiz_status]
       before_action :authorize_access_request!, only: [:create, :update, :show_quiz_status, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
-      
+
       def index
         @quizzes = Quiz.all.published.includes(author: :avatar)
         @json = Quiz.arrange_quizzes(@quizzes)
@@ -18,10 +20,10 @@ module Api
       end
 
       def show_quiz_status
-        @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload['user_id'])
+        @quiz_status = QuizStatus.find_by(quiz_id: @quiz.id, user_id: payload["user_id"])
         @json = { quiz_status: @quiz_status }
         if !@quiz_status.nil?
-          @done_queries = @quiz_status.done_queries 
+          @done_queries = @quiz_status.done_queries
           @json[:queries] = @queries
           @json[:done_queries] = @done_queries
         end
@@ -46,7 +48,7 @@ module Api
         else
           update_params = quiz_params
         end
-        
+
         if @quiz.update(update_params)
           render json: @quiz
         else
@@ -83,7 +85,7 @@ module Api
         if params[:increment]
           @quiz_status.failed_answer_times += 1
         end
-          
+
         if @quiz_status.update(quiz_status_params)
           render json: @quiz_status
         else

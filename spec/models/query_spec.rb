@@ -1,7 +1,9 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Query, type: :model do
-  describe '#create' do
+  describe "#create" do
 
     it "is valid with a body, answer, revealed_point, and point(問題、回答、開示ポイント、獲得ポイントがあれば正当である)" do
       query = FactoryBot.build(:query)
@@ -39,7 +41,7 @@ RSpec.describe Query, type: :model do
     end
 
     it "is invalid if a point is more than 100(獲得ポイントが100以上だと不正になる)" do
-      query = FactoryBot.build(:query, point: (Random.rand * 10 ** 5 ).ceil)
+      query = FactoryBot.build(:query, point: (Random.rand * 10 ** 5).ceil)
       query.valid?
       expect(query.errors[:point]).to include("は100より小さい値にしてください")
     end

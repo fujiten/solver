@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
 
   root to: "home#index"
@@ -11,7 +13,7 @@ Rails.application.routes.draw do
             post :do_query
           end
         end
-        
+
         member do
           get :show_quiz_status
           post :solve
@@ -37,7 +39,7 @@ Rails.application.routes.draw do
   post "signin", controller: :signin, action: :create
   post "signup", controller: :signup, action: :create
   delete "signin", controller: :signin, action: :destroy
-  get '/auth/twitter/callback', to: 'authentication#twitter'
-  get '/authenticate', to: 'authentication#authenticate'
+  get "/auth/twitter/callback", to: "authentication#twitter"
+  get "/authenticate", to: "authentication#authenticate"
 
 end

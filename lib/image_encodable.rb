@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ImageEncodable
 
   def encode(image_size_symbol)
     encoded_image = Base64.strict_encode64(open(avatar_url(image_size_symbol)).read)
-    prefix = 'data:image/png;base64,'
+    prefix = "data:image/png;base64,"
     prefix + encoded_image
   end
 
@@ -23,10 +25,10 @@ module ImageEncodable
     def avatar_url(image_size_symbol)
       if image.try(:[], image_size_symbol)
         url = image[image_size_symbol].url
-        url = 'public' + url if Rails.env.development?
+        url = "public" + url if Rails.env.development?
         url
       else
-        'public/default.png'
+        "public/default.png"
       end
     end
 end

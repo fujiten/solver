@@ -1,7 +1,9 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Quiz, type: :model do
-  describe '#create' do
+  describe "#create" do
 
     it "is valid with a title, question, answer(タイトル、問題、解説があれば正当である)" do
       quiz = FactoryBot.build(:quiz)
