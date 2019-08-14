@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SigninController < ApplicationController
   before_action :authorize_access_request!, only: [:destroy]
 
@@ -29,5 +31,5 @@ class SigninController < ApplicationController
     def not_found
       render json: { error: "メールアドレスとパスワードの組み合わせが見つかりません"}, status: :not_found
     end
-    
+
 end

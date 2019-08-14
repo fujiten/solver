@@ -1,4 +1,6 @@
-require_relative 'boot'
+# frozen_string_literal: true
+
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -34,9 +36,9 @@ module App
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.time_zone = 'Tokyo'
+    config.time_zone = "Tokyo"
 
-    config.x.cors_allowed_origins = ENV.fetch('CORS_ALLOWED_ORIGINS', 'http://localhost:8080')
+    config.x.cors_allowed_origins = ENV.fetch("CORS_ALLOWED_ORIGINS", "http://localhost:8080")
 
     config.autoload_paths += %W(#{config.root}/lib)
   end

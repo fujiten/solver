@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "image_processing/mini_magick"
 
 class ImageUploader < Shrine
@@ -16,7 +18,7 @@ class ImageUploader < Shrine
     end
 
     Attacher.validate do
-      validate_max_size 5 * 1024 * 1024, message: '5MBを超える画像はアップロードできません。'
+      validate_max_size 5 * 1024 * 1024, message: "5MBを超える画像はアップロードできません。"
     end
 
     versions # return the hash of processed files

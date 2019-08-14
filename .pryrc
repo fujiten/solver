@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 ## Settings
 Pry.config.color = true
-Pry.config.editor = 'nvim'
+Pry.config.editor = "nvim"
 
 Pry.config.prompt = proc do |obj, level, _|
   prompt = ""
@@ -11,8 +13,8 @@ end
 
 # Alias
 Pry.commands.alias_command "lM", "ls -M"
-Pry.commands.alias_command 'w', 'whereami'
-Pry.commands.alias_command '.clr', '.clear'
+Pry.commands.alias_command "w", "whereami"
+Pry.commands.alias_command ".clr", ".clear"
 
 ## pry-byebug
 # Hit Enter to repeat last command
@@ -21,22 +23,22 @@ Pry::Commands.command /^$/, "repeat last command" do
 end
 
 if defined? PryByebug
-  Pry.commands.alias_command 'c', 'continue'
-  Pry.commands.alias_command 's', 'step'
-  Pry.commands.alias_command 'n', 'next'
-  Pry.commands.alias_command 'f', 'finish'
+  Pry.commands.alias_command "c", "continue"
+  Pry.commands.alias_command "s", "step"
+  Pry.commands.alias_command "n", "next"
+  Pry.commands.alias_command "f", "finish"
 end
 
 ## pry-stack_explorer
 if defined? PryStackExplorer
-  Pry.commands.alias_command 'bt', 'show-stack'
-  Pry.commands.alias_command 'fr', 'frame'
+  Pry.commands.alias_command "bt", "show-stack"
+  Pry.commands.alias_command "fr", "frame"
 end
 
 ## awesome_print
 if defined? AwesomePrint
   begin
-    require 'awesome_print'
+    require "awesome_print"
     Pry.config.print = proc { |output, value| output.puts value.ai }
   rescue LoadError => err
     puts "no awesome_print :("

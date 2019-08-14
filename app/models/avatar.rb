@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Avatar < ApplicationRecord
   include ImageUploader::Attachment.new(:image)
   include ImageEncodable

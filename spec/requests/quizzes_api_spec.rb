@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe "Quizzes", type: :request do
 
@@ -23,30 +25,31 @@ RSpec.describe "Quizzes", type: :request do
       end
 
     end
-    
+
     describe "特定の問題の取得(GET api/v1/quizzes/:id)" do
-  
+
       it "200と特定のクイズを返す(returns 200 and a specfic quiz" do
         quiz = FactoryBot.create(:quiz)
         get api_v1_quiz_path(quiz)
         json = JSON.parse(response.body)
-  
+
         expect(response).to have_http_status(200)
         expect(json["quiz"]["title"]).to eq(quiz.title)
       end
-  
+
     end
 
   end
 
 
   context "ログインの必要なAPI" do
-    
+
     let(:quiz_params) {
       { title:           Faker::Lorem.word,
         question:        Faker::Lorem.sentence,
         answer:          Faker::Lorem.sentence,
-        image:           'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=' } }
+        image:           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=" }
+    }
 
     def sign_in(user)
       post signin_path, params: { email: user.email, password: user.password }
@@ -56,13 +59,13 @@ RSpec.describe "Quizzes", type: :request do
     end
 
     describe "新規投稿(POST api/v1/quizzes)" do
-      
+
       it "ログイン中に正しいparamsを送れば新たなクイズを作成し、そのクイズを返す(create a new quiz and return the quiz with valid params" do
         user = FactoryBot.create(:user)
         tokens = sign_in(user)
 
         expect do
-          post api_v1_quizzes_path, params: { quiz: quiz_params }, 
+          post api_v1_quizzes_path, params: { quiz: quiz_params },
                                     headers: { "Cookie" => tokens[:access_key],
                                               "X-CSRF-TOKEN" => tokens[:csrf] }
         end.to change(Quiz, :count).by(1)
@@ -78,7 +81,7 @@ RSpec.describe "Quizzes", type: :request do
         tokens = sign_in(user)
 
         quiz_params[:title] = nil
-        post api_v1_quizzes_path, params: { quiz: quiz_params }, 
+        post api_v1_quizzes_path, params: { quiz: quiz_params },
                                   headers: { "Cookie" => tokens[:access_key],
                                              "X-CSRF-TOKEN" => tokens[:csrf] }
 
@@ -104,7 +107,7 @@ RSpec.describe "Quizzes", type: :request do
         tokens = sign_in(user)
 
         expect do
-          patch api_v1_quiz_path(db_quiz), params: { quiz: quiz_params }, 
+          patch api_v1_quiz_path(db_quiz), params: { quiz: quiz_params },
                                            headers: { "Cookie" => tokens[:access_key],
                                                       "X-CSRF-TOKEN" => tokens[:csrf] }
         end.to change { Quiz.find(db_quiz.id).title }.from(db_quiz.title).to(quiz_params[:title])
@@ -117,7 +120,7 @@ RSpec.describe "Quizzes", type: :request do
         tokens = sign_in(user)
         quiz_params[:title] = nil
 
-        patch api_v1_quiz_path(db_quiz), params: { quiz: quiz_params }, 
+        patch api_v1_quiz_path(db_quiz), params: { quiz: quiz_params },
                                          headers: { "Cookie" => tokens[:access_key],
                                                     "X-CSRF-TOKEN" => tokens[:csrf] }
         expect(response).to have_http_status(422)
@@ -131,7 +134,7 @@ RSpec.describe "Quizzes", type: :request do
         tokens = sign_in(user)
 
         expect do
-          patch api_v1_quiz_path(other_db_quiz), params: { quiz: quiz_params }, 
+          patch api_v1_quiz_path(other_db_quiz), params: { quiz: quiz_params },
           headers: { "Cookie" => tokens[:access_key],
                     "X-CSRF-TOKEN" => tokens[:csrf] }
         end.to raise_error(ActiveRecord::RecordNotFound)

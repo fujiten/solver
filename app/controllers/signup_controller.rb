@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SignupController < ApplicationController
 
   def create
@@ -6,7 +8,7 @@ class SignupController < ApplicationController
       payload = { user_id: user.id }
       session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
       tokens = session.login
-      
+
       response.set_cookie(JWTSessions.access_cookie,
                           value: tokens[:access],
                           httponly: true,
@@ -22,5 +24,5 @@ class SignupController < ApplicationController
   def user_params
     params.fetch(:user, {}).permit(:email, :name, :password, :password_confirmation)
   end
-  
+
 end
