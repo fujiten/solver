@@ -88,13 +88,6 @@ class AuthenticationController < ApplicationController
                             httponly: true,
                             secure: Rails.env.production?)
 
-          response.set_cookie("signedIn",
-                            value: true,
-                            domain: ENV["BASE_DOMAIN"],
-                            httponly: true,
-                            path: "/",
-                            secure: Rails.env.production?)
-
           render json: { status: "authentication_success", csrf: tokens[:csrf], my_avatar: user.avatar.encode(:icon), uid: user.id }
 
         else
