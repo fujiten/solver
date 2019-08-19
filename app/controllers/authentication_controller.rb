@@ -85,13 +85,13 @@ class AuthenticationController < ApplicationController
 
           response.set_cookie(JWTSessions.access_cookie,
                             value: tokens[:access],
-                            domain: ENV["BASE_DOMAIN"],
                             httponly: true,
                             secure: Rails.env.production?)
 
           response.set_cookie("signedIn",
                             value: true,
                             domain: ENV["BASE_DOMAIN"],
+                            httponly: true,
                             path: "/",
                             secure: Rails.env.production?)
 
