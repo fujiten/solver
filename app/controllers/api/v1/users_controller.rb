@@ -35,18 +35,18 @@ module Api
       def show_me
         ac_token = request.cookies['ac_token']
         request.headers['Authorization'] = "Bearer #{ac_token}"
+        
+        response.set_cookie("signedIn",
+        value: nil,
+        httponly: true,
+        domain: ENV["BASE_DOMAIN"],
+        path: "/",
+        secure: Rails.env.production?)
 
         authorize_access_request!
 
         response.set_cookie("ac_token",
         value: nil,
-        domain: ENV["BASE_DOMAIN"],
-        path: "/",
-        secure: Rails.env.production?)
-
-        response.set_cookie("signedIn",
-        value: nil,
-        httponly: true,
         domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
