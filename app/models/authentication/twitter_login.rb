@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Authentication::TwitterLogin
 
   def initialize
@@ -5,7 +7,7 @@ class Authentication::TwitterLogin
   end
 
   def get_request_token
-    consumer.get_request_token(oauth_callback: ENV['TWITTER_CALLBACK_URL'])
+    consumer.get_request_token(oauth_callback: ENV["TWITTER_CALLBACK_URL"])
   end
 
   def get_access_token(oauth_token, oauth_token_secret)
@@ -19,24 +21,24 @@ class Authentication::TwitterLogin
   def get_access_token_from(request_token, params)
     request_token.get_access_token(
       {},
-      :oauth_token => params[:oauth_token],
-      :oauth_verifier => params[:oauth_verifier]
+      oauth_token: params[:oauth_token],
+      oauth_verifier: params[:oauth_verifier]
     )
   end
 
   def fetch_request_token_after_callback(request)
     OAuth::RequestToken.new(
       consumer,
-      request.cookies['request_token'],
-      request.cookies['request_token_secret']
+      request.cookies["request_token"],
+      request.cookies["request_token_secret"]
     )
   end
 
   def get_account_info(access_token)
     consumer.request(
       :get,
-      '/1.1/account/verify_credentials.json',
-      access_token, { :scheme => :query_string }
+      "/1.1/account/verify_credentials.json",
+      access_token, { scheme: :query_string }
     )
   end
 
@@ -56,9 +58,9 @@ class Authentication::TwitterLogin
 
     def consumer
       @consumer ||= OAuth::Consumer.new(
-        ENV['TWITTER_CONSUMER_KEY'],
-        ENV['TWITTER_CONSUMER_KEY_SECRET'],
-        { :site => "https://api.twitter.com" }
+        ENV["TWITTER_CONSUMER_KEY"],
+        ENV["TWITTER_CONSUMER_KEY_SECRET"],
+        { site: "https://api.twitter.com" }
       )
     end
 

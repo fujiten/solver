@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthenticationController < ApplicationController
 
   def twitter
@@ -14,7 +16,7 @@ class AuthenticationController < ApplicationController
 
       if user_info["screen_name"]
 
-        user = User.find_or_create(user_info, 'twitter')
+        user = User.find_or_create(user_info, "twitter")
 
         if user.persisted?
 
@@ -22,15 +24,15 @@ class AuthenticationController < ApplicationController
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
           cookie_key_value_pairs = {
-            'oauth_token2' => access_token.params["oauth_token"],
-            'oauth_token_secret' => access_token.params["oauth_token_secret"],
-            'csrf' => tokens[:csrf],
-            'ac_token' => tokens[:access]
+            "oauth_token2" => access_token.params["oauth_token"],
+            "oauth_token_secret" => access_token.params["oauth_token_secret"],
+            "csrf" => tokens[:csrf],
+            "ac_token" => tokens[:access]
           }
 
           set_cookies_at_once(response, cookie_key_value_pairs)
 
-          response.set_cookie('signedIn',
+          response.set_cookie("signedIn",
             value: true,
             domain: ENV["BASE_DOMAIN"],
             path: "/",
@@ -38,11 +40,11 @@ class AuthenticationController < ApplicationController
 
           set_cookie_at_token_validness(true)
 
-          redirect_to ENV['CLIANT_SIDE_TOP_PAGE']
+          redirect_to ENV["CLIANT_SIDE_TOP_PAGE"]
 
         else
 
-          redirect_to ENV['CLIANT_SIDE_TOP_PAGE']
+          redirect_to ENV["CLIANT_SIDE_TOP_PAGE"]
 
         end
 
@@ -61,11 +63,11 @@ class AuthenticationController < ApplicationController
   def authenticate
 
     # クッキー内にアクセストークン発行のためのトークンがあれば、それを利用して認可をスキップ
-    if true?(request.cookies["token_validness"]) && request.cookies["oauth_token2"] && request.cookies['oauth_token_secret']
-      
+    if true?(request.cookies["token_validness"]) && request.cookies["oauth_token2"] && request.cookies["oauth_token_secret"]
+
       twitter_login = Authentication::TwitterLogin.new
 
-      access_token = twitter_login.get_access_token(request.cookies['oauth_token2'], request.cookies['oauth_token_secret'])
+      access_token = twitter_login.get_access_token(request.cookies["oauth_token2"], request.cookies["oauth_token_secret"])
       twitter_response = twitter_login.get_account_info(access_token)
 
       case twitter_response
@@ -75,16 +77,23 @@ class AuthenticationController < ApplicationController
 
         if user_info["screen_name"]
 
-          user = User.find_by(uid: user_info['id'], provider: 'twitter')
+          user = User.find_by(uid: user_info["id"], provider: "twitter")
 
           payload = { user_id: user.id }
           session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
           tokens = session.login
-    
-          response.set_cookie(JWTSessions.access_cookie,
+
+          response.set_cookie("ac_token",
                             value: tokens[:access],
                             httponly: true,
                             secure: Rails.env.production?)
+
+          response.set_cookie("signedIn",
+                            value: true,
+                            domain: ENV["BASE_DOMAIN"],
+                            path: "/",
+                            secure: Rails.env.production?)
+
           render json: { status: "authentication_success", csrf: tokens[:csrf], my_avatar: user.avatar.encode(:icon), uid: user.id }
 
         else
@@ -104,7 +113,7 @@ class AuthenticationController < ApplicationController
       twitter_login.set_request_tokens_in_cookie(response, request_token)
 
       rtn = {}
-      rtn["status"] = 'return_callback_url'
+      rtn["status"] = "return_callback_url"
       rtn["oauth_url"] = request_token.authorize_url
 
       render json: rtn
@@ -129,7 +138,7 @@ class AuthenticationController < ApplicationController
     end
 
     def set_cookie_at_token_validness(boolian)
-      response.set_cookie('token_validness',
+      response.set_cookie("token_validness",
         value: boolian,
         httponly: true,
         domain: ENV["BASE_DOMAIN"],

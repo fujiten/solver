@@ -1,4 +1,6 @@
-module Api 
+# frozen_string_literal: true
+
+module Api
   module V1
     class QueriesController < ApplicationController
       before_action :set_query, only: [:show, :update, :destroy]

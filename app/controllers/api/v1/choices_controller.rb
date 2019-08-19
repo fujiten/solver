@@ -1,4 +1,6 @@
-module Api 
+# frozen_string_literal: true
+
+module Api
   module V1
     class ChoicesController < ApplicationController
 
@@ -16,7 +18,7 @@ module Api
         else
           render json: { error: @choice.errors.full_messages }, status: :unprocessable_entity
         end
-        
+
       end
 
       def update
