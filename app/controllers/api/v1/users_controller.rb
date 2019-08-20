@@ -37,7 +37,7 @@ module Api
         request.headers['Authorization'] = "Bearer #{ac_token}"
 
         p ac_token
-
+        p request.headers['Authorization']
         response.set_cookie("signedIn",
         value: nil,
         domain: ENV["BASE_DOMAIN"],
@@ -55,6 +55,7 @@ module Api
         response.set_cookie(JWTSessions.access_cookie,
         value: ac_token,
         httponly: true,
+        domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
 

@@ -86,6 +86,7 @@ class AuthenticationController < ApplicationController
          response.set_cookie(JWTSessions.access_cookie,
                             value: tokens[:access],
                             path: "/",
+                            domain: ENV["BASE_DOMAIN"],
                             httponly: true,
                             secure: Rails.env.production?)
 
