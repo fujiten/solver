@@ -51,8 +51,9 @@ module Api
         secure: Rails.env.production?)
 
         response.set_cookie(JWTSessions.access_cookie,
-        value: request.cookies["ac_token"],
+        value: ac_token,
         httponly: true,
+        path: "/",
         secure: Rails.env.production?)
 
         render json: { csrf: request.cookies["csrf"],

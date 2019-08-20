@@ -3,8 +3,8 @@
 module Api
   module V1
     class QuizzesController < ApplicationController
-      before_action :set_quiz, only: [:show, :show_quiz_status]
       before_action :authorize_access_request!, only: [:create, :update, :show_quiz_status, :destroy, :solve, :update_quiz_status, :show_my_quizzes]
+      before_action :set_quiz, only: [:show, :show_quiz_status]
 
       def index
         @quizzes = Quiz.all.published.includes(author: :avatar)
