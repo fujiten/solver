@@ -23,7 +23,8 @@ class User < ApplicationRecord
     begin
       ActiveRecord::Base.transaction do
         save!
-        Avatar.create(user_id: user.id)
+        Avatar.create(user_id: self.id)
+        self
       end
     rescue => exception
       false

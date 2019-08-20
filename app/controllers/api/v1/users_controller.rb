@@ -39,14 +39,13 @@ module Api
         p ac_token
         p request.headers['Authorization']
 
-
-        authorize_access_request!
-
         response.set_cookie("signedIn",
         value: nil,
         domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
+
+        authorize_access_request!
 
         response.set_cookie("ac_token",
         value: nil,
@@ -67,6 +66,8 @@ module Api
       end
 
       def show_mypage
+
+        p request.cookies
 
         # draftedとpublishedをそれぞれグループ化してクライアントに返す。
         @my_quizzes = current_user.my_quizzes.group_by { |quiz| quiz.published }

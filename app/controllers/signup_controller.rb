@@ -3,7 +3,7 @@
 class SignupController < ApplicationController
 
   def create
-    User.new(user_params).create_user_and_avatar
+    user = User.new(user_params).create_user_and_avatar
     if user.persisted?
       payload = { user_id: user.id }
       session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
