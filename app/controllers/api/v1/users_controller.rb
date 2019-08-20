@@ -38,13 +38,15 @@ module Api
 
         p ac_token
         p request.headers['Authorization']
+
+
+        authorize_access_request!
+
         response.set_cookie("signedIn",
         value: nil,
         domain: ENV["BASE_DOMAIN"],
         path: "/",
         secure: Rails.env.production?)
-
-        authorize_access_request!
 
         response.set_cookie("ac_token",
         value: nil,
