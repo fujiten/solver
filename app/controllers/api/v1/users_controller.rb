@@ -36,6 +36,8 @@ module Api
         ac_token = request.cookies['ac_token']
         request.headers['Authorization'] = "Bearer #{ac_token}"
 
+        p ac_token
+
         response.set_cookie("signedIn",
         value: nil,
         domain: ENV["BASE_DOMAIN"],
