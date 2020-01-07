@@ -3,7 +3,7 @@
 class AuthenticationController < ApplicationController
 
   def twitter
-
+    p 2
     twitter_login = Authentication::TwitterLogin.new
 
     request_token = twitter_login.fetch_request_token_after_callback(request)
