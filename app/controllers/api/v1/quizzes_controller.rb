@@ -9,7 +9,7 @@ module Api
       def index
         @quizzes = Quiz.all.published.includes(author: :avatar)
         @json = Quiz.arrange_quizzes(@quizzes)
-        p 123
+
         render json: @json
       end
 
