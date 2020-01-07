@@ -1,32 +1,5 @@
 version: 2
 jobs:
-  test:
-    machine:
-      image: circleci/classic:edge
-    steps:
-      - checkout
-      - run:
-          name: touch .env
-          command: touch .env
-      - run:
-          name: docker-compose build
-          command: docker-compose build
-      - run:
-          name: docker-compose up
-          command: docker-compose up -d
-      - run:
-          name: sleep for waiting launch db
-          command: sleep 1
-      - run:
-          name: rails db:create and db:migrate
-          command: docker-compose run app rails db:create db:migrate
-      - run:
-          name: rspec
-          command: docker-compose run app rspec
-      - run:
-          name: docker-compose down
-          command: docker-compose down
-
   deploy:
     working_directory: ~/deploy
     machine:
