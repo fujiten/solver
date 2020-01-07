@@ -16,7 +16,6 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-    env_file: .env
   db:
     image: postgres:11.2
     ports:
